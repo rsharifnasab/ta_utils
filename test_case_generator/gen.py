@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import argparse
-from os.path import isfile, isdir, join
+from os.path import isfile, isdir, join, basename
 from os.path import exists as path_exists
 from os import system as shell
 from os import remove, makedirs, listdir
@@ -15,6 +15,7 @@ TEST_DIR = "./tests"
 FAILED_DIR = "./failed"
 IN_FILES = TEST_DIR + "/in"
 OUT_FILES = TEST_DIR + "/out"
+ZIP_NAME = "t"
 
 
 def error(text):
@@ -41,8 +42,8 @@ def get_last_file_number():
 def make_zip():
     print("creating zip file")
     make_archive(
-        "tests",  # output name
-        "zip",  # file format
+        base_name=ZIP_NAME, 
+        format="zip",  # file format
         root_dir=TEST_DIR,
     )
 
@@ -71,37 +72,38 @@ def fail_test(i, to_delete_files):
     makedirs(FAILED_DIR)
 
     for f in to_delete_files:
+        print(f"attemp to delete {f}")
         if isfile(f):
-            copyfile(f, f"{FAILED_DIR}/{f}")
+            copyfile(f, f"{FAILED_DIR}/{basename(f)}")
             remove(f)
+            print("deleted")
     print(f"failed on test {i}")
     print(f"deleted out files for test{i}")
     sys_exit()
 
 
-def execute(i, sols, validate = False):
-    inp_file = IN_FILES + f"/input{i}.txt"
-    out_file = OUT_FILES + f"/output{i}.txt"
+def execute(i, sols, validate=False):
+    inp = IN_FILES + f"/input{i}.txt"
+    out = OUT_FILES + f"/output{i}.txt"
 
-    out_file_temp = OUT_FILES + f"/output{i}.tmp"
-    shell(f"cat {inp_file} | {sols[0]} > {out_file}")
+    out_chk = OUT_FILES + f"/output{i}.tmp"
+    if not validate: 
+        shell(f"cat {inp} | {sols[0]} > {out}")
 
-    passed = isfile(out_file)
+    passed = isfile(out)
     #print("running solutions..")
     for sol in sols:
-        shell(f"cat {inp_file} | {sol} > {out_file_temp}")
-        passed = passed and isfile(out_file_temp) and cmp(out_file, out_file_temp)
+        shell(f"cat {inp} | {sol} > {out_chk}")
+        passed = passed and isfile(out_chk) and cmp(out, out_chk)
         if not passed:
-            error(f"error on test {i} sol={sol}")
+            error(f"error on test {i} sol : {sol}")
+            if validate:
+                fail_test(i, (out_chk,))
+            else:
+                fail_test(i, (inp, out, out_chk))
 
-    if passed:
-        print(f"test {i} passed")
-        remove(out_file_temp)
-    else:
-        if validate:
-            fail_test(i, (out_file_temp))
-        else:
-            fail_test(i, (inp_file, out_file, out_file_temp))
+    print(f"test {i} passed")
+    remove(out_chk)
 
 
 def get_options():
@@ -126,7 +128,7 @@ def clear_tests():
         rmtree(TEST_DIR)
     else:
         error("test dir isnt available")
-    zip_add = TEST_DIR + ".zip"
+    zip_add = ZIP_NAME + ".zip"
     if isfile(zip_add):
         remove(zip_add)
     else:

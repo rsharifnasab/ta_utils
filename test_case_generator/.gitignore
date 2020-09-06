@@ -1,0 +1,4 @@
+*.zip
+tests/
+failed/
+
