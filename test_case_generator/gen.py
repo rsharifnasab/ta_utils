@@ -79,7 +79,7 @@ def fail_test(i, to_delete_files):
     sys_exit()
 
 
-def out_file_write(i, sols):
+def execute(i, sols, validate = False):
     inp_file = IN_FILES + f"/input{i}.txt"
     out_file = OUT_FILES + f"/output{i}.txt"
 
@@ -87,7 +87,7 @@ def out_file_write(i, sols):
     shell(f"cat {inp_file} | {sols[0]} > {out_file}")
 
     passed = isfile(out_file)
-    print("running solutions..")
+    #print("running solutions..")
     for sol in sols:
         shell(f"cat {inp_file} | {sol} > {out_file_temp}")
         passed = passed and isfile(out_file_temp) and cmp(out_file, out_file_temp)
@@ -98,7 +98,10 @@ def out_file_write(i, sols):
         print(f"test {i} passed")
         remove(out_file_temp)
     else:
-        fail_test(i, (inp_file, out_file, out_file_temp))
+        if validate:
+            fail_test(i, (out_file_temp))
+        else:
+            fail_test(i, (inp_file, out_file, out_file_temp))
 
 
 def get_options():
@@ -135,7 +138,7 @@ def closed_range(start, stop, step=1):
     return range(start, stop + d, step)
 
 
-def create(tests_count, sols):
+def create(tests_count, sols, func):
     make_dirs()
 
     if sols is None:
@@ -145,47 +148,23 @@ def create(tests_count, sols):
     start_index = get_last_file_number() + 1
 
     for i in closed_range(start_index, tests_count):
-        print(f"-----------\ni:{i}")
-        inp = input_rand()
+        print(f"- - - i:{i} - - - ")
+        inp = func()
         input_file_write(i, inp)
-        out_file_write(i, sols)
+        execute(i, sols, validate=False)
 
     make_zip()
     print("done!")
 
 
-def validate_i(i, sols):
-    inp_file = IN_FILES + f"/input{i}.txt"
-    out_file_main = OUT_FILES + f"/output{i}.txt"
-    out_file_1 = OUT_FILES + f"/output{i}.txt1"
-    out_file_2 = OUT_FILES + f"/output{i}.txt2"
-
-    print("running solutions..")
-    shell(f"cat {inp_file} | {sols[0]} > {out_file_1}")
-    shell(f"cat {inp_file} | {sols[1]} > {out_file_2}")
-
-    passed = (
-        cmp(out_file_main, out_file_1)
-        and cmp(out_file_main, out_file_2)
-        and isfile(out_file_1)
-        and isfile(out_file_2)
-    )
-    if passed:
-        print(f"test {i} passed")
-        remove(out_file_1)
-        remove(out_file_2)
-    else:
-        fail_test(i, (out_file_1, out_file_2))
-
-
 def validate(sols):
     end_index = get_last_file_number()
     for i in closed_range(1, end_index):
-        validate_i(i, sols)
+        execute(i, sols, validate=True)
+
 
 
 #################################################################333
-
 
 def input_rand():
     print("generating random")
@@ -199,8 +178,7 @@ def input_rand():
         ans += f"{temp}\n"
 
     print("random input gen done")
-    return ans
-
+    return ans if 0 else input()
 
 if __name__ == "__main__":
 
@@ -211,4 +189,4 @@ if __name__ == "__main__":
     if opt.job == "validate":
         validate(opt.sol)
     elif opt.job == "create":
-        create(opt.tests, opt.sol)
+        create(opt.tests, opt.sol, func=input_rand)
