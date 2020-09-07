@@ -108,7 +108,7 @@ def execute(i, sols, validate=False):
 def get_options():
     parser = argparse.ArgumentParser(
         prog="./gen.py",
-        description="generate or test test cases",
+        description="generate or validate test cases",
         epilog="enjoy creating tests.. :)",
     )
     parser.add_argument(
