@@ -49,7 +49,6 @@ def make_zip():
 
 
 def input_file_write(i, inp):
-    print("writing to input file ")
     file_add = IN_FILES + f"/input{i}.txt"
     in_file = open(file_add, "w")
     in_file.write(inp)
@@ -88,12 +87,12 @@ def execute(i, sols, validate=False):
 
     out_chk = OUT_FILES + f"/output{i}.tmp"
     if not validate: 
-        shell(f"cat {inp} | {sols[0]} > {out}")
+        shell(f"cat {inp} | {sols[0]} | tr -d '[:space:]'  > {out}")
 
     passed = isfile(out)
     #print("running solutions..")
     for sol in sols:
-        shell(f"cat {inp} | {sol} > {out_chk}")
+        shell(f"cat {inp} | {sol} | tr -d '[:space:]'  > {out_chk}")
         passed = passed and isfile(out_chk) and cmp(out, out_chk)
         if not passed:
             error(f"error on test {i} sol : {sol}")
@@ -169,7 +168,6 @@ def validate(sols):
 #################################################################333
 
 def input_rand():
-    print("generating random")
 
     MAX_N = 3
     MIN_N = 1
@@ -179,7 +177,6 @@ def input_rand():
         temp = rnd(1, 10)
         ans += f"{temp}\n"
 
-    print("random input gen done")
     return ans if 0 else input()
 
 if __name__ == "__main__":
