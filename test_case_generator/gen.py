@@ -122,17 +122,13 @@ def get_options():
 
 
 def clear_tests():
-    print(">> deleting old tests")
-    if isdir(TEST_DIR):
-        rmtree(TEST_DIR)
-    else:
-        error("test dir isnt available")
-    zip_add = ZIP_NAME + ".zip"
-    if isfile(zip_add):
-        remove(zip_add)
-    else:
-        error("zip file isn't here")
-
+    for f in (TEST_DIR, ZIP_NAME+".zip", FAILED_DIR):
+        if isdir(f):
+            rmtree(f)
+        if isfile(f):
+            remove(f)
+        print(".", end="")
+    print(" deleted old tests")
 
 def closed_range(start, stop, step=1):
     d = 1 if (step > 0) else -1
