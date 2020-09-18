@@ -8,8 +8,8 @@ mkdir sandbox
 
 echo "copying files"
 cp junit-jars/*.jar sandbox/
-cp toTest/*.java sandbox/
-cp tests/project/* sandbox/ > /dev/null 2>&1 || echo "project folder is empty"
+cp -r toTest/* sandbox/
+cp -r tests/project/* sandbox/ > /dev/null 2>&1 || echo "project folder is empty"
 cp tests/test/* sandbox/
 
 
