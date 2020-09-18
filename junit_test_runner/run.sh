@@ -32,7 +32,7 @@ echo "updating zip file"
 rm t.zip > /dev/null 2>&1
 
 cd tests
-zip -r ../t.zip -- *glob*
+zip -r ../t.zip -- *
 
 
 
