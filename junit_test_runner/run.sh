@@ -26,11 +26,14 @@ cd ..
 
 echo "deleting sandbox"
 find . -name '*.class' -delete
-rm -r ./sandbox
+# rm -r ./sandbox
 
 echo "updating zip file"
 rm t.zip > /dev/null 2>&1
 
 cd tests
-zip -r ../t.zip *
+zip -r ../t.zip -- *glob*
+
+
+
 
