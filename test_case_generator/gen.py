@@ -95,13 +95,12 @@ def execute(i, sols, validate=False):
         shell(f"cat {inp} | {sol} | tr -d '[:space:]'  > {out_chk}")
         passed = passed and isfile(out_chk) and cmp(out, out_chk)
         if not passed:
-            error(f"error on test {i} sol : {sol}")
-            if validate:
-                fail_test(i, (out_chk,))
-            else:
+            error(f"error on test {i}, sol: {sol}")
+            if not validate:
                 fail_test(i, (inp, out, out_chk))
 
-    print(f"test {i} passed")
+    if passed:
+        print(f"test {i} passed")
     remove(out_chk)
 
 
