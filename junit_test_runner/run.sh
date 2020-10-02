@@ -6,19 +6,21 @@ rm -r sandbox > /dev/null 2>&1
 
 mkdir sandbox
 
-echo "copying files"
+echo "copying files to sandbox"
 cp junit-jars/*.jar sandbox/
-cp -r toTest/* sandbox/
 cp -r tests/project/* sandbox/ > /dev/null 2>&1 || echo "project folder is empty"
+cp -r toTest/* sandbox/
 cp tests/test/* sandbox/
 
-
-cd sandbox/
+cd sandbox/ || exit
 
 echo "comiling project"
-javac -cp .:junit.jar *.java || exit
-echo "compile complete"
+javac -cp .:junit.jar ./*.java || exit
 
+echo "running SampleTest"
+java -cp .:junit.jar:j2.jar  org.junit.runner.JUnitCore SampleTest || exit
+
+echo "running MyTest"
 java -cp .:junit.jar:j2.jar  org.junit.runner.JUnitCore MyTest || exit
 echo "run complete"
 
@@ -31,7 +33,7 @@ find . -name '*.class' -delete
 echo "updating zip file"
 rm t.zip > /dev/null 2>&1
 
-cd tests
+cd tests || exit
 zip -r ../t.zip -- *
 
 
