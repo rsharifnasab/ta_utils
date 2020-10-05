@@ -10,12 +10,13 @@ echo "copying files to sandbox"
 cp junit-jars/*.jar sandbox/
 cp -r tests/project/* sandbox/ > /dev/null 2>&1 || echo "project folder is empty"
 cp -r toTest/* sandbox/
-cp tests/test/* sandbox/
+cp -r tests/test/* sandbox/
 
 cd sandbox/ || exit
 
 echo "comiling project"
-javac -cp .:junit.jar ./*.java || exit
+find . -name "*.java" > sources.txt
+javac -cp .:junit.jar @sources.txt || exit
 
 echo "running SampleTest"
 java -cp .:junit.jar:j2.jar  org.junit.runner.JUnitCore SampleTest || exit
