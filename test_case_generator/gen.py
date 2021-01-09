@@ -42,7 +42,7 @@ def get_last_file_number():
 def make_zip():
     print("creating zip file")
     make_archive(
-        base_name=ZIP_NAME, 
+        base_name=ZIP_NAME,
         format="zip",  # file format
         root_dir=TEST_DIR,
     )
@@ -86,13 +86,13 @@ def execute(i, sols, validate=False):
     out = OUT_FILES + f"/output{i}.txt"
 
     out_chk = OUT_FILES + f"/output{i}.tmp"
-    if not validate: 
-        shell(f"cat {inp} | {sols[0]} | tr -d '[:space:]'  > {out}")
+    if not validate:
+        shell(f"cat {inp} | {sols[0]}  > {out}")
 
     passed = isfile(out)
     #print("running solutions..")
     for sol in sols:
-        shell(f"cat {inp} | {sol} | tr -d '[:space:]'  > {out_chk}")
+        shell(f"cat {inp} | {sol}  > {out_chk}")
         passed = passed and isfile(out_chk) and cmp(out, out_chk)
         if not passed:
             error(f"error on test {i}, sol: {sol}")
@@ -129,6 +129,7 @@ def clear_tests():
         print(".", end="")
     print(" deleted old tests")
 
+
 def closed_range(start, stop, step=1):
     d = 1 if (step > 0) else -1
     return range(start, stop + d, step)
@@ -159,8 +160,7 @@ def validate(sols):
         execute(i, sols, validate=True)
 
 
-
-#################################################################333
+# 333
 
 def input_rand():
 
@@ -173,6 +173,7 @@ def input_rand():
         ans += f"{temp}\n"
 
     return ans if 0 else input()
+
 
 if __name__ == "__main__":
 
