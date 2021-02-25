@@ -35,7 +35,7 @@ echo "updating zip file"
 rm t.zip > /dev/null 2>&1
 
 cd tests || exit
-zip -r ../t.zip -- *
+zip -r ../t.zip ./
 
 
 
