@@ -3,7 +3,7 @@
 set -o errexit
 set -o nounset
 
-start_point="$(pwd)"
+readonly start_point="$(pwd)"
 
 
 try_delete(){
