@@ -59,16 +59,18 @@ rm -r ./sandbox
 
 echo "updating solution file"
 try_delete "sol.zip"
-cd toTest || clean
-zip -r ../sol.zip ./
-cd ..
+(
+    cd toTest || clean
+    zip -r ../sol.zip ./
+)
 
 
 echo "updating tests zip file"
 try_delete "tests.zip"
-cd tests || clean
-zip -r ../tests.zip ./
-cd ..
+(
+    cd tests || clean
+    zip -r ../tests.zip ./
+)
 
 
 clean
