@@ -33,7 +33,7 @@ cd sandbox/
 
 echo "comiling project"
 find . -name "*.java" > sources.txt
-javac -cp .:junit.jar @sources.txt || clean
+javac --release 8 -cp .:junit.jar @sources.txt || clean
 
 
 echo "running MyTest"
