@@ -1,6 +1,7 @@
 #!/bin/sh
 
-set -e
+set -o errexit
+set -o nounset
 
 start_point="$(pwd)"
 
