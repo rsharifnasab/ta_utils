@@ -13,20 +13,23 @@ try_delete(){
 
 clean() {
     cd "$start_point"
+    find . -name '*.class' -delete
     try_delete "sandbox"
     exit
 }
 
 clear
 
-find . -name '*.class' -delete
-try_delete "sandbox"
+(
+ clean
+)
 
 mkdir sandbox
 
 echo "copying files to sandbox"
 cp junit-jars/*.jar sandbox/
-cp -r tests/project/* sandbox/ > /dev/null 2>&1 || echo "project folder is empty"
+cp -r tests/project/* sandbox/ > /dev/null 2>&1 \
+    || echo "project folder is empty"
 cp -r toTest/* sandbox/
 cp -r tests/test/* sandbox/
 
@@ -35,7 +38,6 @@ cd sandbox/
 echo "comiling project"
 find . -name "*.java" > sources.txt
 javac --release 8 -cp .:junit.jar @sources.txt || clean
-
 
 echo "running MyTest"
 for testFile in ./*Test.java; do
@@ -46,15 +48,7 @@ for testFile in ./*Test.java; do
         || clean
 done
 echo "run complete"
-
-cd ..
-
-echo "deleting sandbox"
-find . -name '*.class' -delete
-rm -r ./sandbox
-
-
-
+cd ../
 
 
 echo "updating solution file"
@@ -73,4 +67,5 @@ try_delete "tests.zip"
 )
 
 
+echo "cleaning up"
 clean
