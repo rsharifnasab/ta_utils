@@ -5,13 +5,13 @@ set -o nounset
 
 start_point="$(pwd)"
 
-opts="--allow"
+when_fail="--allow"
 
 
 
 if [ $# -ge 1 ] && [ -n "$1" ]
 then
-    opts="$1"
+    when_fail="$1"
 fi
 
 
@@ -32,12 +32,13 @@ terminate(){
 }
 
 test_fail(){
-    if [ "$opts" = "--fail" ] || [ "$opts" = "-f" ]; then
+    if [ "$when_fail" = "--fail" ] || [ "$when_fail" = "-f" ]; then
         terminate
-    else [ "$opts" = "--allow" ] || [ "$opts" = "-a" ];
+    else [ "$when_fail" = "--allow" ] || [ "$when_fail" = "-a" ];
         true
     fi;
 }
+
 
 clear #screen
 clean
@@ -63,7 +64,7 @@ for testFile in ./*Test.java; do
     className="$(basename "$testFile" .java)"
     echo "- - - testing \"$className\" - - - "
     java -cp .:junit.jar:j2.jar org.junit.runner.JUnitCore \
-        "$className"   || test_fail
+        "$className"  || test_fail
 done
 
 echo " - - - run complete - - - "
