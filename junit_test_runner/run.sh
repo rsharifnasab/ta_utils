@@ -3,7 +3,16 @@
 set -o errexit
 set -o nounset
 
-readonly start_point="$(pwd)"
+start_point="$(pwd)"
+
+opts="--allow"
+
+
+
+if [ $# -ge 1 ] && [ -n "$1" ]
+then
+    opts="$1"
+fi
 
 
 try_delete(){
@@ -15,14 +24,23 @@ clean() {
     cd "$start_point"
     find . -name '*.class' -delete
     try_delete "sandbox"
+}
+
+terminate(){
+    clean
     exit
 }
 
-clear
+test_fail(){
+    if [ "$opts" = "--fail" ] || [ "$opts" = "-f" ]; then
+        terminate
+    else [ "$opts" = "--allow" ] || [ "$opts" = "-a" ];
+        true
+    fi;
+}
 
-(
- clean
-)
+clear #screen
+clean
 
 mkdir sandbox
 
@@ -30,42 +48,44 @@ echo "copying files to sandbox"
 cp junit-jars/*.jar sandbox/
 cp -r tests/project/* sandbox/ > /dev/null 2>&1 \
     || echo "project folder is empty"
-cp -r toTest/* sandbox/
+cp -r sol/* sandbox/
 cp -r tests/test/* sandbox/
 
 cd sandbox/
 
-echo "comiling project"
+echo "-> comiling project"
 find . -name "*.java" > sources.txt
-javac --release 8 -cp .:junit.jar @sources.txt || clean
+javac --release 8 -cp .:junit.jar @sources.txt || terminate
 
-echo "running MyTest"
+echo "--> running tests"
+
 for testFile in ./*Test.java; do
     className="$(basename "$testFile" .java)"
-    echo "class name : \"$className\""
+    echo "- - - testing \"$className\" - - - "
     java -cp .:junit.jar:j2.jar org.junit.runner.JUnitCore \
-        "$className"  \
-        || clean
+        "$className"   || test_fail
 done
-echo "run complete"
+
+echo " - - - run complete - - - "
 cd ../
 
 
-echo "updating solution file"
+echo "-> create solution zip"
 try_delete "sol.zip"
 (
-    cd toTest || clean
-    zip -r ../sol.zip ./
+    cd sol || terminate
+    zip -q -r ../sol.zip ./
 )
 
 
-echo "updating tests zip file"
+echo "-> update tests zip"
 try_delete "tests.zip"
 (
-    cd tests || clean
-    zip -r ../tests.zip ./
+    cd tests || terminate
+    zip -q -r ../tests.zip ./
 )
 
 
-echo "cleaning up"
+echo "> cleaning up."
 clean
+echo "Done"

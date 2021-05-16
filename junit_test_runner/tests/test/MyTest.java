@@ -10,7 +10,7 @@ public class MyTest {
     private final PrintStream originalOut = System.out;
 
     /**
-     * override the output of running program 
+     * override the output of running program
      * if the UUT print anything, we will save it in outContent
      * and we reset its content every test
      */
@@ -19,7 +19,7 @@ public class MyTest {
         outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
     }
-    
+
     /**
      * after ending of each test,
      * we restore the original stdout
@@ -30,23 +30,28 @@ public class MyTest {
     public void restoreStreams() {
         System.setOut(originalOut);
     }
-    
+
     /**
      * what was the output
      * of program while running in the current test
      */
-    public String out(){
+    public String out() {
         return outContent.toString().trim();
     }
 
     @Test
-    public void test(){
-        Main.main(new String[]{});
+    public void test() {
+        Main.main(new String[] {});
 
         String correct = "correctanswer";
         assertEquals(
-                out(),
-                correct.trim()
-            );
+            out(),
+            correct.trim()
+        );
+    }
+
+    @Test
+    public void badTest() {
+        fail();
     }
 }
