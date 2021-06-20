@@ -5,6 +5,9 @@ import java.util.*;
 import org.junit.*;
 import static org.junit.Assert.*;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.CoreMatchers.*;
+
 public class MyTest {
     private ByteArrayOutputStream outContent;
     private final PrintStream originalOut = System.out;
