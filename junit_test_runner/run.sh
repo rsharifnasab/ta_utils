@@ -65,7 +65,7 @@ for testFile in ./*Test.java; do
 
   #  java -cp .:junit.jar:hamcrest.jar MyRunner
 
-  java -jar junit-platform-console.jar --class-path "." --scan-class-path
+  java -jar junit-platform-console.jar --cp "." --scan-class-path  --fail-if-no-tests  --reports-dir=reportdir --disable-banner
 
   break
 done
