@@ -56,19 +56,9 @@ javac --release 11 -cp .:junit-platform-console.jar:hamcrest.jar @sources.txt ||
 
 echo "-> running tests"
 
-for testFile in ./*Test.java; do
-  className="$(basename "$testFile" .java)"
-  echo "--> testing \"$className\""
-  #  java -cp .:junit.jar:hamcrest.jar org.junit.runner.JUnitCore \
-  #      "$className"  || test_fail
-
-
-  #  java -cp .:junit.jar:hamcrest.jar MyRunner
-
-  java -jar junit-platform-console.jar --cp "." --scan-class-path  --fail-if-no-tests  --reports-dir=reportdir --disable-banner
-
-  break
-done
+java -jar junit-platform-console.jar --cp "." --scan-class-path \
+    --fail-if-no-tests  --reports-dir=reportdir --disable-banner \
+    || test_fail
 
 echo "-> run complete"
 cd ../
