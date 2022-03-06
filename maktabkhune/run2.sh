@@ -37,7 +37,9 @@ function gat(){
 #}
 
 
-the_c=`find "$TMP_FOLDER" -name "*.c" -print`
+all_c=`find "$TMP_FOLDER" -name "*.c" -print`
+the_c=`echo "$all_c" | head -1`
+
 
 # --suffix=none 
 # --pad-oper
