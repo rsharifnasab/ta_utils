@@ -25,35 +25,45 @@ function gat(){
 }
 
 
-rm -rf "$TMP_FOLDER" || true
-mkdir "$TMP_FOLDER"
-
-
-
-find "$LOOKING_FOLDER" -maxdepth 1 -type f -printf "%C@ %p\0" | sort -zrn | { \
-     read -d '' ts file; \
-     echo "$file"; \
-     extract "$file"
-}
-
-
-all_c=`find "$TMP_FOLDER" -name "*.c" -print`
-the_c=`echo "$all_c" | head -1`
-
 # --suffix=none 
 # --pad-oper
 ASTYLE_OPTS=(--quiet --mode=c --style=kr --break-blocks --pad-comma --pad-first-paren-out --unpad-paren --add-braces --convert-tabs --delete-empty-lines)
 GCC_OPTS=(-Wall -Wno-implicit -lm)
 SPLINT_OPTS=(-standard -hints +quiet -limit 1 -retvalint -retvalother -bufferoverflowhigh +matchanyintegral -exportlocal)
+BAT_OPTS=(--style=numbers --paging=never)
+TREE_OPTS=(--dirsfirst  --noreport --si --du -htr)
 
-bat --paging=never --language=c "$the_c"
+
+# clear temp folder
+rm -rf "$TMP_FOLDER"
+mkdir "$TMP_FOLDER"
+
+# find and extract submission file from downloads
+find "$LOOKING_FOLDER" -maxdepth 1 -type f -printf "%C@ %p\0" | sort -zrn | { \
+    read -d '' ts file; \
+    echo "$file"; \
+    extract "$file"
+}
+
+# zip's file structure
+tree "${TREE_OPTS[@]}" -- "$TMP_FOLDER"
+all_c=`find "$TMP_FOLDER" -name "*.c" -print`
+the_c=`echo "$all_c" | head -1`
+
+# view unmodified code
+bat "${BAT_OPTS[@]}" "$the_c"
+echo "----------------------"
+
+# format code and view it again
 clang-format -i "$the_c" --style=Google
-astyle "$the_c" "${ASTYLE_OPTS[@]}" # "$the_c"
-bat --paging=never "$the_c"
+astyle "$the_c" "${ASTYLE_OPTS[@]}"
+bat "${BAT_OPTS[@]}" "$the_c"
+
+# compile, view compiler warnings and linter messages
 gcc "${GCC_OPTS[@]}" "$the_c" -o "$TMP_FOLDER/a.out"
-#splint -weak -hints +quiet -limit 1 -retvalother -bufferoverflowhigh "$the_c" || true
 splint "${SPLINT_OPTS[@]}" "$the_c" || true
 #read -p "Press enter to continue"
+
 echo "running the program"
 firejail --private="$TMP_FOLDER" --net=none --quiet ./a.out
 #rm -rf "$TMP_FOLDER" || true
