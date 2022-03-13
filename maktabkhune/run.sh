@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -o errexit
 set -o nounset
 set -o pipefail
 
@@ -33,17 +33,25 @@ SPLINT_OPTS=(-standard -hints +quiet -limit 1 -retvalint -retvalother -bufferove
 BAT_OPTS=(--style=numbers --paging=never)
 TREE_OPTS=(--dirsfirst  --noreport --si --du -htr)
 
+# read argument with default value
+KEEP="${1:-delete}"
 
-# clear temp folder
-rm -rf "$TMP_FOLDER"
-mkdir "$TMP_FOLDER"
+# if keep is set to 1, then keep the original file
+if [ $KEEP = "keep" ]; then
+    echo "Keeping original file"
 
-# find and extract submission file from downloads
-find "$LOOKING_FOLDER" -maxdepth 1 -type f -printf "%C@ %p\0" | sort -zrn | { \
-    read -d '' ts file; \
-    echo "$file"; \
-    extract "$file"
-}
+    # clear temp folder
+    rm -rf "$TMP_FOLDER"
+    mkdir "$TMP_FOLDER"
+
+    # find and extract submission file from downloads
+    find "$LOOKING_FOLDER" -maxdepth 1 -type f -printf "%C@ %p\0" | \
+        sort -zrn | { \
+            read -d '' ts file; \
+            echo "$file"; \
+            extract "$file"
+        }
+fi
 
 # zip's file structure
 tree "${TREE_OPTS[@]}" -- "$TMP_FOLDER"
