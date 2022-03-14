@@ -37,7 +37,7 @@ TREE_OPTS=(--dirsfirst  --noreport --si --du -htr)
 KEEP="${1:-delete}"
 
 # if keep is set to 1, then keep the original file
-if [ $KEEP = "keep" ]; then
+if [ "$KEEP" != "keep" ]; then
     echo "Keeping original file"
 
     # clear temp folder
@@ -54,7 +54,7 @@ if [ $KEEP = "keep" ]; then
 fi
 
 # zip's file structure
-tree "${TREE_OPTS[@]}" -- "$TMP_FOLDER"
+\tree "${TREE_OPTS[@]}" -- "$TMP_FOLDER"
 all_c=`find "$TMP_FOLDER" -name "*.c" -print`
 the_c=`echo "$all_c" | head -1`
 
