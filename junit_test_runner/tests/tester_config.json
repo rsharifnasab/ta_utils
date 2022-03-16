@@ -1,8 +1,7 @@
 {
     "number_of_tests": 1,
-
     "solution_signature": "Main.java",
     "can_submit_single_file": true,
-    "single_file_path": "Main.java"
+    "single_file_path": "Main.java",
+    "java_version": 11
 }
-
