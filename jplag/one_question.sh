@@ -13,11 +13,13 @@ clean_zip(){
 
 
 
-INP_FOLDER="$1" #"./codes"
-OUT_FOLDER="$2" #"./result"
-LANG="$3"       # "cpp"
-LIB_FOLDER="lib"
-RES_COUNT="100"
+INP_FOLDER="$1"  #"./codes"
+OUT_FOLDER="$2"  #"./result"
+LANG="$3"        #"cpp"
+LIB_FOLDER="$4"  #"./libs/current_question"
+
+LIB_NAME="lib"
+RES_COUNT="40"
 
 
 case "$LANG" in
@@ -28,8 +30,8 @@ case "$LANG" in
         EXTENSIONS="$LANG"
 esac
 
-#mkdir -p "$INP_FOLDER/$LIB_FOLDER"
-#touch "$INP_FOLDER/$LIB_FOLDER/lib.$EXTENSIONS"
+mkdir -p "$INP_FOLDER/$LIB_NAME"
+unzip -q -o "$LIB_FOLDER" -d "$INP_FOLDER/$LIB_NAME"
 
 find "$INP_FOLDER" -name "*.txt" -type f -delete
 find "$INP_FOLDER" -name "*.zip" -type f | while read -r file; do
@@ -52,7 +54,7 @@ astyle "$INP_FOLDER/*" "${ASTYLE_OPTS[@]}"
 JPLAG_JAR="./jplag.jar"
 JPLAG_CMD="java -jar $JPLAG_JAR"
 
-OPTS_LANG=(-l "$LANG" -p "$EXTENSIONS") # -bc "$LIB_FOLDER")
+OPTS_LANG=(-l "$LANG" -p "$EXTENSIONS" -bc "$LIB_NAME")
 OPTS_GENERAL=(-v quiet -c normal -r "$OUT_FOLDER" -n "$RES_COUNT")
 
 mkdir -p "$OUT_FOLDER" 

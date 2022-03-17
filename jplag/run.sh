@@ -7,6 +7,7 @@ set -u
 
 INP="${1:-./codes}"
 OUT_FOLDER="${2:-./result}"
+LIBS_FOLDER="${3:-NO_LIB}"
 TMP_FOLDER="./tmp"
 LANG="java"
 
@@ -32,7 +33,7 @@ for question in "$TMP_FOLDER"/*; do
     if [[ -d "$question" ]]; then
         question_name=$(basename "$question")
         echo "processing $question_name"
-        ./one_question.sh "$question" "$OUT_FOLDER/$question_name" "$LANG"
+        ./one_question.sh "$question" "$OUT_FOLDER/$question_name" "$LANG" "$LIBS_FOLDER/$question_name"
     fi
 done
 
