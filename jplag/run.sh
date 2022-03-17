@@ -15,25 +15,27 @@ mkdir -p "$TMP_FOLDER"
 
 # if INP does not exists print error
 if [ ! -e "$INP"  ]; then
-    echo "input does not exist"
+    echo "Input does not exist"
     exit 1
 fi
 
 if [[ "$INP" == *.zip ]]; then
-    echo "input is in zip file, extracting"
+    echo "Zip file detected, extracting to tmp folder..."
     unzip -q -o "$INP" -d "$TMP_FOLDER"
 else
-    echo "input is a dir, copying to temp folder"
+    echo "Input dir detected, copying to tmp folder..."
     cp -r "$INP"/* "$TMP_FOLDER"
 fi
 
 
 for question in "$TMP_FOLDER"/*; do
     if [[ -d "$question" ]]; then
-        echo "processing $question"
         question_name=$(basename "$question")
+        echo "processing $question_name"
         ./one_question.sh "$question" "$OUT_FOLDER/$question_name" "$LANG"
     fi
 done
 
 
+rm -rf "$TMP_FOLDER"
+echo "done"
