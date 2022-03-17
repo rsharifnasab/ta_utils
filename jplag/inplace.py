@@ -11,7 +11,7 @@ def single_file(file_path, replace_func):
     if file_path.endswith('.gif') or file_path.endswith('.png'):
         return
 
-    print(f"->{file_path}")
+    #print(f"->{file_path}")
     with open(file_path, 'r') as f:
         content = f.read()
     result = re_sub(r'([0-9]{5,14})', replace_func, content)
