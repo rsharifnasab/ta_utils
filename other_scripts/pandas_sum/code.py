@@ -57,8 +57,8 @@ def main():
         for student in f.readlines():
             student = student.strip().replace('\u200c', '')
             score = scores_map.get(student, 0)
-            #print(f"{student} {scores_map[student]}")
-            print(f"{scores_map[student]}")
+            #print(f"{student} {score}")
+            print(f"{score}")
 
 
 if __name__ == "__main__":
