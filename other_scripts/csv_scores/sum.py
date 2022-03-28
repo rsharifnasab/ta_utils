@@ -1,7 +1,10 @@
+#!/bin/env python3
+
 import pandas as pd
 from math import ceil
+import sys
+from pathlib import Path
 
-INP_FILES = ["example"]
 SOON_SCORE = 1.05
 
 Q_REGEX = r"(q\d\d)"
@@ -9,7 +12,7 @@ SCORES_REGEX = Q_REGEX + "|sum+stdnt_id"
 
 
 def process_file(inp_file):
-    df = pd.read_csv(inp_file+".csv", dtype="int")
+    df = pd.read_csv(inp_file, dtype="int")
     df["sum"] = 0
     assert not df.isnull().values.any()
     for _, row in df.iterrows():
@@ -28,15 +31,21 @@ def process_file(inp_file):
     for col in q_cols.columns:
         df[col] = df[col].astype(str).str.zfill(3)
     print(df.head())
-    df.to_csv(f"{inp_file}-sum.csv", index=False)
+
+    inp_name = Path(inp_file).stem
+    df.to_csv(f"{inp_name}-sum.csv", index=False)
     try:
         df.pop("g")
     except:
         pass
-    df.to_excel(f"{inp_file}-sum.xlsx", index=False, type)
+    df.to_excel(f"{inp_name}-sum.xlsx", index=False)
 
 
 def main():
+    INP_FILES = sys.argv[1:]
+    if len(INP_FILES) == 0:
+        print("No input files")
+        sys.exit(1)
     for inp_file in INP_FILES:
         process_file(inp_file)
 
