@@ -60,10 +60,13 @@ done
 
 (
 cd tmp
-cd *
+cd ./*
 rm package-lock.json
 yarn install
-#npm install react-router-dom@5.2.0
 yarn start
+
+#npm install --prefer-offline
+#npm install react-router-dom@5.2.0
+#npm start
 )
 
