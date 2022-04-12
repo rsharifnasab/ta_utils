@@ -60,15 +60,19 @@ done
 
 (
 cd tmp
-cd ./*
-rm package-lock.json
+cd ./* || true
+#rm package-lock.json
 #ln -s ~/Desktop/node_modules ./node_modules
 #yarn install
 #yarn start
 
-npm install --prefer-offline
+npm install --prefer-offline --legacy-peer-deps --quiet --loglevel=error
 #npm install react-router-dom@5.2.0
-#npm start
+
+read -p "Press enter to continue"
+
+npm start --quiet
+
 
 )
 
