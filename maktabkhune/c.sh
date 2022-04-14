@@ -53,14 +53,21 @@ if [ "$KEEP" != "keep" ]; then
         }
 fi
 
-# zip's file structure
-\tree "${TREE_OPTS[@]}" -- "$TMP_FOLDER"
 all_c=`find "$TMP_FOLDER" -name "*.c" -print`
 the_c=`echo "$all_c" | head -1`
 
 # view unmodified code
 bat "${BAT_OPTS[@]}" "$the_c"
-echo "----------------------"
+
+
+echo "=============================="
+
+
+# zip's file structure
+\tree "${TREE_OPTS[@]}" -- "$TMP_FOLDER"
+
+
+echo "=============================="
 
 # format code and view it again
 clang-format -i "$the_c" --style=Google
