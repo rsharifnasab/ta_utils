@@ -62,7 +62,14 @@ done
 cd tmp
 cd ./* || true
 
-node index.js
+npm install --prefer-offline --legacy-peer-deps --quiet --loglevel=error
+
+read -p "Press enter to continue"
+
+npm start --quiet
+
+
+#node index.js
 
 )
 
