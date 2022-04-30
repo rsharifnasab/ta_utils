@@ -29,7 +29,7 @@ function gat(){
 # --pad-oper
 ASTYLE_OPTS=(--quiet --mode=c --style=kr --break-blocks --pad-comma --pad-first-paren-out --unpad-paren --add-braces --convert-tabs --delete-empty-lines)
 GCC_OPTS=(-Wall -Wno-implicit -lm)
-SPLINT_OPTS=(-weak -hints +quiet -limit 1 -retvalother -bufferoverflowhigh +matchanyintegral)
+SPLINT_OPTS=(-weak -hints +quiet -limit 1 -retvalother -bufferoverflowhigh +matchanyintegral +posixlib)
 BAT_OPTS=(--style=numbers --paging=never)
 TREE_OPTS=(--dirsfirst  --noreport --si --du -htr)
 
