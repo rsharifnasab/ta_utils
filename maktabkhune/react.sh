@@ -17,6 +17,7 @@ extract(){
     else
         echo "'$1' is not a valid file"
     fi
+
 }
 
 
@@ -49,7 +50,7 @@ fi
 
 
 \tree "${TREE_OPTS[@]}" -- "$TMP_FOLDER"
-all_src=`find "$TMP_FOLDER" -type d -name node_modules -prune -o   -name "*.js" -print`
+all_src=`find "$TMP_FOLDER" -type d -name node_modules -prune -o   -name "*.js" -or -name "*.jsx" -print`
 echo "$all_src"
 
 # for each in all_src
