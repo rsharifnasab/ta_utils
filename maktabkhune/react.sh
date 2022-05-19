@@ -49,18 +49,23 @@ fi
 
 
 \tree "${TREE_OPTS[@]}" -- "$TMP_FOLDER"
-all_src=`find "$TMP_FOLDER" -type d -name node_modules -prune -o   -name "*.js" -print`
-echo "$all_src"
+
+mapfile -d '' all_src < <(find "$TMP_FOLDER" -type d -name node_modules -prune -o   -name "*.js" -print0)
+
+
 
 # for each in all_src
-for src in $all_src; do
+for src in "${all_src[@]}"; do
     bat "${BAT_OPTS[@]}" "${src}"
 done
 
 
 (
+echo "running"
 cd tmp
-cd ./* || true
+folder="$(ls -tr  --group-directories-first | head -n 1)"
+echo "folder: $folder"
+cd "$folder" || true
 #rm package-lock.json
 #ln -s ~/Desktop/node_modules ./node_modules
 #yarn install
