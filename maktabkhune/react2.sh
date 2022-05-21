@@ -66,11 +66,11 @@ cd tmp
 folder="$(ls -tr  --group-directories-first | head -n 1)"
 echo "folder: $folder"
 cd "$folder" || true
+rm -rf .eslintrc.json
 
 npm install --prefer-offline --legacy-peer-deps --quiet --loglevel=error
 npx "next" build
 
-read -p "Press enter to continue"
 
 npm start --quiet
 

@@ -53,7 +53,7 @@ if [ "$KEEP" != "keep" ]; then
         }
 fi
 
-all_c=`find "$TMP_FOLDER" -name "*.c" -print`
+all_c=`find "$TMP_FOLDER" -name "main.c" -print`
 the_c=`echo "$all_c" | head -1`
 
 # view unmodified code
