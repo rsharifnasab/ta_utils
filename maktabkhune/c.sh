@@ -38,7 +38,7 @@ KEEP="${1:-delete}"
 
 # if keep is set to 1, then keep the original file
 if [ "$KEEP" != "keep" ]; then
-    echo "Keeping original file"
+    echo "loading new file"
 
     # clear temp folder
     rm -rf "$TMP_FOLDER"
@@ -53,7 +53,7 @@ if [ "$KEEP" != "keep" ]; then
         }
 fi
 
-all_c=`find "$TMP_FOLDER" -name "main.c" -print`
+all_c=`find "$TMP_FOLDER" -name "*.c" -print`
 the_c=`echo "$all_c" | head -1`
 
 # view unmodified code
