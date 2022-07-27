@@ -72,7 +72,7 @@ cd "$folder" || true
 #yarn install
 #yarn start
 
-npm install --prefer-offline --legacy-peer-deps --quiet --loglevel=error
+npm install --quiet --loglevel=error
 #npm install react-router-dom@5.2.0
 
 read -p "Press enter to continue"
