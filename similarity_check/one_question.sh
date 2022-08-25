@@ -39,8 +39,8 @@ function flatten(){
 }
 
 function textify(){ # for example textify dart
-    find "$INP_FOLDER" -name "*.$1" -type f | while read file; do
-        mv "$file" "${file%.$1}.txt"
+    find "$INP_FOLDER" -name "*.${1}" -type f | while read file; do
+        mv "$file" "${file%."${1}"}.txt"
     done
 }
 
@@ -86,7 +86,7 @@ done
 
 clean_in_folder
 
-astyle "$INP_FOLDER/*" "${ASTYLE_OPTS[@]}"
+astyle "$INP_FOLDER/*" "${ASTYLE_OPTS[@]}" || true
 
 flatten
 
@@ -101,4 +101,4 @@ $JPLAG_CMD "${JPLAG_OPTS[@]}" "${INP_FOLDER}" > "$OUT_FOLDER/jplag.log" || {
 head -5 "$OUT_FOLDER/jplag.log"
 tail -5 "$OUT_FOLDER/jplag.log"
 
-python3 inplace.py "$OUT_FOLDER"
+python3 inplace.py "./students.txt" "$OUT_FOLDER"

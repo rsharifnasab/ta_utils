@@ -4,14 +4,14 @@ from os.path import isdir
 from sys import argv
 from re import sub as re_sub
 
-from stdid import load_std_map, STD_FILE
+from stdid import load_std_map
 
 
 def single_file(file_path, replace_func):
     if file_path.endswith('.gif') or file_path.endswith('.png'):
         return
 
-    #print(f"->{file_path}")
+    # print(f"->{file_path}")
     with open(file_path, 'r') as f:
         content = f.read()
     result = re_sub(r'([0-9]{5,14})', replace_func, content)
@@ -28,8 +28,9 @@ def traverse(path, func):
             traverse(path + "/" + sub.name, func)
 
 
-def main():
-    map = load_std_map(STD_FILE)
+def main(std_file):
+    std_file = argv[0]
+    map = load_std_map(std_file)
 
     def repl(match):
         s = match.group(0)
@@ -45,4 +46,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(argv[1:])

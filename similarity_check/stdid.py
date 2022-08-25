@@ -1,6 +1,6 @@
 #!/bin/env python3
 
-STD_FILE = "./students.txt"
+from sys import argv
 
 
 def load_std_map(std_file):
@@ -21,8 +21,8 @@ def one_student(std_map):
     print(std_map.get(std_id, std_id))
 
 
-def main():
-    std_map = load_std_map(STD_FILE)
+def main(std_file):
+    std_map = load_std_map(std_file)
     while True:
         try:
             one_student(std_map)
@@ -31,4 +31,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+
+    main(argv[1])
