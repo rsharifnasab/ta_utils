@@ -9,7 +9,9 @@ from shutil import make_archive, rmtree, copyfile
 from filecmp import cmp
 
 from re import findall
-from random import randint as rnd
+
+
+from user import test_input_gen
 
 TEST_DIR = "./tests"
 FAILED_DIR = "./failed"
@@ -18,9 +20,9 @@ OUT_FILES = TEST_DIR + "/out"
 ZIP_NAME = "t"
 
 
+CRED = "\033[91m"
+CEND = "\033[0m"
 def error(text):
-    CRED = "\033[91m"
-    CEND = "\033[0m"
     print(CRED + text + CEND)
 
 
@@ -50,9 +52,8 @@ def make_zip():
 
 def input_file_write(i, inp):
     file_add = IN_FILES + f"/input{i}.txt"
-    in_file = open(file_add, "w")
-    in_file.write(inp)
-    in_file.close()
+    with open(file_add,"w", encoding="UTF-8") as in_file:
+        in_file.write(inp)
 
 
 def make_dirs():
@@ -70,23 +71,23 @@ def fail_test(i, to_delete_files):
         rmtree(FAILED_DIR)
     makedirs(FAILED_DIR)
 
-    for f in to_delete_files:
-        print(f"attemp to delete {f}")
-        if isfile(f):
-            copyfile(f, f"{FAILED_DIR}/{basename(f)}")
-            remove(f)
+    for del_file in to_delete_files:
+        print(f"attemp to delete {del_file}")
+        if isfile(del_file):
+            copyfile(del_file, f"{FAILED_DIR}/{basename(del_file)}")
+            remove(del_file)
             print("deleted")
     print(f"failed on test {i}")
     print(f"deleted out files for test{i}")
     sys_exit()
 
 
-def execute(i, sols, validate=False):
+def execute(i, sols, validation=False):
     inp = IN_FILES + f"/input{i}.txt"
     out = OUT_FILES + f"/output{i}.txt"
 
     out_chk = OUT_FILES + f"/output{i}.tmp"
-    if not validate:
+    if not validation:
         shell(f"cat {inp} | {sols[0]}  > {out}")
 
     passed = isfile(out)
@@ -96,7 +97,7 @@ def execute(i, sols, validate=False):
         passed = passed and isfile(out_chk) and cmp(out, out_chk)
         if not passed:
             error(f"error on test {i}, sol: {sol}")
-            if not validate:
+            if not validation:
                 fail_test(i, (inp, out, out_chk))
 
     if passed:
@@ -121,18 +122,18 @@ def get_options():
 
 
 def clear_tests():
-    for f in (TEST_DIR, ZIP_NAME+".zip", FAILED_DIR):
-        if isdir(f):
-            rmtree(f)
-        if isfile(f):
-            remove(f)
+    for del_file in (TEST_DIR, ZIP_NAME+".zip", FAILED_DIR):
+        if isdir(del_file):
+            rmtree(del_file)
+        if isfile(del_file):
+            remove(del_file)
         print(".", end="")
     print(" deleted old tests")
 
 
 def closed_range(start, stop, step=1):
-    d = 1 if (step > 0) else -1
-    return range(start, stop + d, step)
+    offset = 1 if (step > 0) else -1
+    return range(start, stop + offset, step)
 
 
 def create(tests_count, sols, func):
@@ -148,7 +149,7 @@ def create(tests_count, sols, func):
         print(f"- - - i:{i} - - - ")
         inp = func()
         input_file_write(i, inp)
-        execute(i, sols, validate=False)
+        execute(i, sols, validation=False)
 
     make_zip()
     print("done!")
@@ -157,22 +158,7 @@ def create(tests_count, sols, func):
 def validate(sols):
     end_index = get_last_file_number()
     for i in closed_range(1, end_index):
-        execute(i, sols, validate=True)
-
-
-# 333
-
-def input_rand():
-
-    MAX_N = 3
-    MIN_N = 1
-    N = rnd(MIN_N, MAX_N)
-    ans = f"{N}\n"
-    for _ in range(N):
-        temp = rnd(1, 10)
-        ans += f"{temp}\n"
-
-    return ans if 0 else input()
+        execute(i, sols, validation=True)
 
 
 if __name__ == "__main__":
@@ -184,4 +170,4 @@ if __name__ == "__main__":
     if opt.job == "validate":
         validate(opt.sol)
     elif opt.job == "create":
-        create(opt.tests, opt.sol, func=input_rand)
+        create(opt.tests, opt.sol, func=test_input_gen)
