@@ -22,6 +22,8 @@ ZIP_NAME = "t"
 
 CRED = "\033[91m"
 CEND = "\033[0m"
+
+
 def error(text):
     print(CRED + text + CEND)
 
@@ -52,7 +54,7 @@ def make_zip():
 
 def input_file_write(i, inp):
     file_add = IN_FILES + f"/input{i}.txt"
-    with open(file_add,"w", encoding="UTF-8") as in_file:
+    with open(file_add, "w", encoding="UTF-8") as in_file:
         in_file.write(inp)
 
 
@@ -91,7 +93,7 @@ def execute(i, sols, validation=False):
         shell(f"cat {inp} | {sols[0]}  > {out}")
 
     passed = isfile(out)
-    #print("running solutions..")
+    # print("running solutions..")
     for sol in sols:
         shell(f"cat {inp} | {sol}  > {out_chk}")
         passed = passed and isfile(out_chk) and cmp(out, out_chk)
@@ -122,7 +124,7 @@ def get_options():
 
 
 def clear_tests():
-    for del_file in (TEST_DIR, ZIP_NAME+".zip", FAILED_DIR):
+    for del_file in (TEST_DIR, ZIP_NAME + ".zip", FAILED_DIR):
         if isdir(del_file):
             rmtree(del_file)
         if isfile(del_file):
