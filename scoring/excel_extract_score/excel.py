@@ -11,7 +11,7 @@ FILE_PATH = args.file
 
 
 def score_ok(df):
-    col = df["نمره/10.00"]
+    col = df["نمره کوییز۲"]
     score = col[:].astype(float).fillna(0)
 
     return score
@@ -19,7 +19,7 @@ def score_ok(df):
 
 def main():
     df = pd.read_excel(FILE_PATH)
-    st_numbers = df["کد شناسائی"][:].astype(
+    st_numbers = df["شماره دانشجویی"][:].astype(
         float).fillna(0).astype(int).astype(str)
     print(st_numbers)
     scores = score_ok(df)
@@ -31,6 +31,7 @@ def main():
         if np.isnan(float(st_id)):
             continue
         scores_final.append((st_id, score))
+        assert st_id not in scores_map.keys(), f"duplicate key {st_id}"
         scores_map[st_id] = score
 
     with open("./students.txt", "r") as f:
