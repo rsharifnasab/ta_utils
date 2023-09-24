@@ -11,7 +11,8 @@ FILE_PATH = args.file
 
 
 def score_ok(df):
-    col = df["نمره کوییز۲"]
+    print(df.head())
+    col = df["phase1-original"]
     score = col[:].astype(float).fillna(0)
 
     return score
