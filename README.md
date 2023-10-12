@@ -1,5 +1,5 @@
 # TA utils 
-the utilities i need everywhere when I'm TA! 
+The utilities that I need as a TA! 
 
-+ run junit tests in terminal 
-+ create test case with python
++ Run your Junit tests in the terminal. 
++ Generate test case with python.
