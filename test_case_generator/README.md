@@ -1,16 +1,16 @@
-# test case generator 
- this script can generate random test cases,
- this test cases can be used for [quera](https://quera.ir/dashboard/) judge
+# Test-case Generator 
+ This script can generate random test-cases,
+ These test-cases can be used for [Quera](https://quera.ir/dashboard/) judge.
 
-## how does it work?
-+ it not works on windows (need bash pipe)
-+ install python 3 (version >= 3.6)
-+ open `gen.py` and re-write `input_rand` function 
-+  run `./gen.py --help` and read help
+## How does it work?
++ It doesn't work on Windows. (need bash pipe)
++ Install Python3. (version >= 3.6)
++ Open `user.py` and implement `test_input_gen()` function in a way that suits your solution.
++ Run `./gen.py --help` for further information.
 
 
 
-## example
+## Example
 
 ```bash
 ./gen.py delete
