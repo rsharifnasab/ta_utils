@@ -12,7 +12,7 @@ LIB_FOLDER="$4"  #"./libs/current_question"
 LIB_NAME="lib"
 RES_COUNT="40"
 
-clean_zip(){ 
+clean_zip(){
    zip -d "$1" __MACOSX/\* \*/.DS_Store  > /dev/null 2>&1 || true
    true
 }
@@ -35,7 +35,7 @@ function flatten(){
             done
         fi
     done
-    find "$INP_FOLDER" -type d -empty -delete    
+    find "$INP_FOLDER" -type d -empty -delete
 }
 
 function textify(){ # for example textify dart
@@ -49,7 +49,15 @@ function clean_out_folder(){
 }
 
 function clean_in_folder(){
-    find "$INP_FOLDER" \( -name ".gitignore" -or -name ".idea" -or -name "*.class" -or -name ".git" \) -print0 | sort | uniq | xargs -0 -r -n 1 rm -r
+    find "$INP_FOLDER" \
+        \( -name ".gitignore" \
+            -or -name ".idea"  \
+            -or -name "*.class" \
+            -or -name ".git" \
+        \) -print0 |
+        sort |
+        uniq |
+        xargs -0 -r -n 1 rm -r || true
 }
 
 case "$LANG" in
@@ -91,7 +99,7 @@ astyle "$INP_FOLDER/*" "${ASTYLE_OPTS[@]}" || true
 flatten
 
 
-mkdir -p "$OUT_FOLDER" 
+mkdir -p "$OUT_FOLDER"
 clean_out_folder
 $JPLAG_CMD "${JPLAG_OPTS[@]}" "${INP_FOLDER}" > "$OUT_FOLDER/jplag.log" || {
     cat "$OUT_FOLDER/jplag.log"

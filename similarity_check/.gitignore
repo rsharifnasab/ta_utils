@@ -2,3 +2,5 @@ students.txt
 tmp
 *.zip
 result
+/sources
+/codes
