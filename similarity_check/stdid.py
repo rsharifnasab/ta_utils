@@ -4,7 +4,7 @@ from sys import argv
 
 
 def load_std_map(std_file):
-    with open(std_file, "r") as f:
+    with open(std_file, "r", encoding="UTF-8") as f:
         students = {}
         for line in f:
             line_split = line.split()
@@ -31,5 +31,4 @@ def main(std_file):
 
 
 if __name__ == "__main__":
-
     main(argv[1])
